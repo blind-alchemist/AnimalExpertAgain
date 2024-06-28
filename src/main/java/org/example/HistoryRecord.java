@@ -3,11 +3,11 @@ package org.example;
 public class HistoryRecord {
 
     private Entity entity;
-    private Boolean isExist;
+    private Boolean toBe;
 
-    public HistoryRecord(Entity entity, Boolean isExist) {
+    public HistoryRecord(Entity entity, Boolean toBe) {
         this.entity = entity;
-        this.isExist = isExist;
+        this.toBe = toBe;
     }
 
     public Entity getEntity() {
@@ -18,11 +18,11 @@ public class HistoryRecord {
         this.entity = entity;
     }
 
-    public Boolean getExist() {
-        return isExist;
+    public Boolean getToBe() {
+        return toBe;
     }
 
-    public void setExist(Boolean exist) {
-        isExist = exist;
+    public void setToBe(Boolean exist) {
+        toBe = exist;
     }
 }

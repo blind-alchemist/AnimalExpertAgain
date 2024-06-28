@@ -2,19 +2,19 @@ package org.example;
 
 public class Entity {
 
-    private String entityType;
+    private EntityType entityType;
     private String name;
 
-    public Entity(String entityType, String name) {
+    public Entity(EntityType entityType, String name) {
         this.entityType = entityType;
         this.name = name;
     }
 
-    public String getEntityType() {
+    public EntityType getEntityType() {
         return entityType;
     }
 
-    public void setEntityType(String entityType) {
+    public void setEntityType(EntityType entityType) {
         this.entityType = entityType;
     }
 
