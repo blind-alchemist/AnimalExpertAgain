@@ -8,6 +8,7 @@ import java.util.Map;
 public class KnowledgeBase {
 
     Map<Entity, List<Entity>> knowledgeBase = new HashMap<>();
+
     List<HistoryRecord> userInput = new ArrayList<>();
 
     public Entity guessing() {
@@ -53,7 +54,16 @@ public class KnowledgeBase {
         return null;
     }
 
-    public void update() {
-        "".isEmpty();
+    public void update(Entity animal) {
+        List<Entity> characteristics = new ArrayList<>();
+        for (HistoryRecord historyRecord : userInput) {
+            if (historyRecord.getEntity().getEntityType().equals(EntityType.CHARACTERISTIC) && historyRecord.getToBe()) {
+                characteristics.add(historyRecord.getEntity());
+            }
+        }
+        if (knowledgeBase.containsKey(animal)) {
+        characteristics.addAll(knowledgeBase.get(animal));
+    }
+    knowledgeBase.put(animal, characteristics);
     }
 }

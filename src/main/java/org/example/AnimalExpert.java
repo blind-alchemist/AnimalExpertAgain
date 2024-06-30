@@ -8,6 +8,8 @@ public class AnimalExpert {
 
     Scanner enter = new Scanner(System.in);
     String startText = "Загадай животное и нажми Enter";
+    String animalName = "";
+    String charName = "";
 
     public void gameplayLoop() {
 
@@ -19,11 +21,13 @@ public class AnimalExpert {
             Entity variant = knowledgeBase.guessing();
             if (variant == null) {
                 out.println("Я не могу угадать :( Кого ты загадал?");
-                String animalName = enter.nextLine();
-                knowledgeBase.update();
+                animalName = enter.nextLine();
+                out.println("Какие есть характеристики у этого животного?");
+                charName = enter.nextLine();
+                knowledgeBase.update(new Entity(EntityType.ANIMAL, animalName));
+                knowledgeBase.update(new Entity(EntityType.CHARACTERISTIC, charName));
                 knowledgeBase.userInput.clear();
                 out.println(startText);
-
             }  else if (variant.getEntityType().equals(EntityType.ANIMAL)) {
                 out.println("Животное, которое ты загадал - " + variant.getName());
                 String animalGuess = enter.nextLine();
@@ -32,12 +36,13 @@ public class AnimalExpert {
                     knowledgeBase.userInput.clear();
                     out.println("-----\n" + startText);
                 } else {
-                    knowledgeBase.update();
+                    knowledgeBase.update(new Entity(EntityType.ANIMAL, animalName));
                 }
             } else  //variant type is "characteristic"
             {
                 out.println("Животное, которое ты загадал, имеет " + variant.getName());
                 String charAnswer = enter.nextLine();
+                knowledgeBase.userInput.add(new HistoryRecord(variant, charAnswer.equals("да")));
             }
         }
     }
