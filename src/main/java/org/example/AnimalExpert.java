@@ -1,6 +1,6 @@
 package org.example;
 
-import java.util.Scanner;
+import java.util.*;
 
 import static java.lang.System.out;
 
@@ -14,35 +14,56 @@ public class AnimalExpert {
     public void gameplayLoop() {
 
         KnowledgeBase knowledgeBase = new KnowledgeBase();
+        Map<Entity, List<Entity>> knowledgeBaseMap = new HashMap<>();
+        List<HistoryRecord> userInputList = new ArrayList<>();
         out.println(startText);
         enter.nextLine();
 
+
+        Entity fox = new Entity(EntityType.ANIMAL, "лиса");
+        Entity snake = new Entity(EntityType.ANIMAL, "змея");
+        Entity legs = new Entity(EntityType.CHARACTERISTIC, "ноги");
+        Entity tail = new Entity(EntityType.CHARACTERISTIC, "хвост");
+        Entity wool = new Entity(EntityType.CHARACTERISTIC, "шерсть");
+        List <Entity> charFox = Arrays.asList(legs, tail, wool);
+        List <Entity> charSnake = Arrays.asList(legs, tail);
+        knowledgeBaseMap.put(fox, charFox);
+        knowledgeBaseMap.put(snake, charSnake);
+
+
         while (true) {
-            Entity variant = knowledgeBase.guessing();
+            Entity variant = knowledgeBase.guessing(knowledgeBaseMap, userInputList);
+            List<Entity> newChar = new ArrayList<>();
             if (variant == null) {
                 out.println("Я не могу угадать :( Кого ты загадал?");
                 animalName = enter.nextLine();
-                out.println("Какие есть характеристики у этого животного?");
+                out.println("Какие есть характеристики у этого животного? Напиши их через запятую");
                 charName = enter.nextLine();
-                knowledgeBase.update(new Entity(EntityType.ANIMAL, animalName));
-                knowledgeBase.update(new Entity(EntityType.CHARACTERISTIC, charName));
-                knowledgeBase.userInput.clear();
+                charName.toLowerCase();
+                String[] charNameArray = charName.split(",");
+                for (String word : charNameArray) {
+                    newChar.add(new Entity(EntityType.CHARACTERISTIC, word));
+                }
+                knowledgeBase.update(new Entity(EntityType.ANIMAL, animalName), newChar, knowledgeBaseMap, userInputList);
+                knowledgeBase.update(new Entity(EntityType.CHARACTERISTIC, charName), newChar, knowledgeBaseMap, userInputList);
+                userInputList.clear();
                 out.println(startText);
             }  else if (variant.getEntityType().equals(EntityType.ANIMAL)) {
                 out.println("Животное, которое ты загадал - " + variant.getName());
                 String animalGuess = enter.nextLine();
                 if (animalGuess.equals("да")) {
                     out.println("Ура, я победил!");
-                    knowledgeBase.userInput.clear();
+                    userInputList.clear();
                     out.println("-----\n" + startText);
                 } else {
-                    knowledgeBase.update(new Entity(EntityType.ANIMAL, animalName));
+                    //knowledgeBase.update(new Entity(EntityType.ANIMAL, animalName), newChar, knowledgeBaseMap, userInputList);
+                    userInputList.add(new HistoryRecord(variant, Boolean.FALSE));
                 }
             } else  //variant type is "characteristic"
             {
                 out.println("Животное, которое ты загадал, имеет " + variant.getName());
                 String charAnswer = enter.nextLine();
-                knowledgeBase.userInput.add(new HistoryRecord(variant, charAnswer.equals("да")));
+                userInputList.add(new HistoryRecord(variant, charAnswer.equals("да")));
             }
         }
     }
