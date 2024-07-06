@@ -6,51 +6,56 @@ public class KnowledgeBase {
 
 
     public Entity guessing(Map<Entity, List<Entity>> knowledgeBase, List<HistoryRecord> userInput) {
-        List<Entity> variants = new ArrayList<>();
-        List<Entity> charList = new ArrayList<>();
+        List<Entity> animalVariants = new ArrayList<>();
+        List<Entity> charVariants = new ArrayList<>();
         for (Map.Entry<Entity, List<Entity>> entry : knowledgeBase.entrySet()) {
             boolean ignoreAnimal = false;
-            for (HistoryRecord historyRecord : userInput) {
-                if (historyRecord.getEntity().getEntityType().equals(EntityType.ANIMAL)) {
-                    ignoreAnimal = true;
-                    break;
-                } else {
-                    if (historyRecord.getToBe()) {
-                        if (!entry.getKey().equals(historyRecord.getEntity())) {
-                            ignoreAnimal = true;
-                            break;
+                for (HistoryRecord historyRecord : userInput) {
+                    if (historyRecord.getEntity().getEntityType().equals(EntityType.ANIMAL)) {
+                        ignoreAnimal = true;
+                        break;
+                    } else {
+                        if (historyRecord.getToBe()) {
+                            for (Entity c : charVariants) {
+                                if (!c.equals(historyRecord.getEntity())) {
+                                    ignoreAnimal = true;
+                                    break;
+                                }
+                            }
                         } else {
-                            ignoreAnimal = true;
-                            break;
+                            for (Entity c : charVariants) {
+                                if (c.equals(historyRecord.getEntity())) {
+                                    ignoreAnimal = true;
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
-            }
             if (!ignoreAnimal) {
-                variants.addAll(charList);
-                charList.addAll(entry.getValue());
+                animalVariants.add(entry.getKey());
+                charVariants.addAll(entry.getValue());
+                System.out.println(charVariants);
+                System.out.println(animalVariants);
             }
         }
-        if (variants.size() == 1) {
-            for (Entity v : variants) {
-                if (v.getEntityType().equals(EntityType.ANIMAL)) {
-                    return variants.get(0);
-                }
+        if (animalVariants.size() == 1) {
+            return animalVariants.get(0);
             }
-        } else if (variants.size() > 1) {
+        else if (animalVariants.size() > 1) {
             if (!userInput.isEmpty()) {
                 for (HistoryRecord historyRecord : userInput) {
                     if (historyRecord.getEntity().getEntityType().equals(EntityType.CHARACTERISTIC)) {
-                        charList.remove(historyRecord.getEntity());
+                        charVariants.remove(historyRecord.getEntity());
                     }
-                    if (charList.isEmpty()) {
-                        return variants.get(0);
+                    if (charVariants.isEmpty()) {
+                        return animalVariants.get(0);
                     } else {
-                        return charList.get(0);
+                        return charVariants.get(0);
                     }
                 }
             } else {
-                return variants.get(0);
+                return charVariants.get(0);
             }
         }
         return null;

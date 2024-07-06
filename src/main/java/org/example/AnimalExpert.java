@@ -19,17 +19,15 @@ public class AnimalExpert {
         out.println(startText);
         enter.nextLine();
 
-
         Entity fox = new Entity(EntityType.ANIMAL, "лиса");
-        Entity snake = new Entity(EntityType.ANIMAL, "змея");
+        Entity spider = new Entity(EntityType.ANIMAL, "паук");
         Entity legs = new Entity(EntityType.CHARACTERISTIC, "ноги");
         Entity tail = new Entity(EntityType.CHARACTERISTIC, "хвост");
         Entity wool = new Entity(EntityType.CHARACTERISTIC, "шерсть");
         List <Entity> charFox = Arrays.asList(legs, tail, wool);
-        List <Entity> charSnake = Arrays.asList(legs, tail);
+        List <Entity> charSpider = Arrays.asList(legs, wool);
+        knowledgeBaseMap.put(spider, charSpider);
         knowledgeBaseMap.put(fox, charFox);
-        knowledgeBaseMap.put(snake, charSnake);
-
 
         while (true) {
             Entity variant = knowledgeBase.guessing(knowledgeBaseMap, userInputList);
@@ -56,14 +54,18 @@ public class AnimalExpert {
                     userInputList.clear();
                     out.println("-----\n" + startText);
                 } else {
-                    //knowledgeBase.update(new Entity(EntityType.ANIMAL, animalName), newChar, knowledgeBaseMap, userInputList);
+                    knowledgeBase.update(new Entity(EntityType.ANIMAL, animalName), newChar, knowledgeBaseMap, userInputList);
                     userInputList.add(new HistoryRecord(variant, Boolean.FALSE));
                 }
             } else  //variant type is "characteristic"
             {
                 out.println("Животное, которое ты загадал, имеет " + variant.getName());
                 String charAnswer = enter.nextLine();
-                userInputList.add(new HistoryRecord(variant, charAnswer.equals("да")));
+                if (charAnswer.equals("да")) {
+                    userInputList.add(new HistoryRecord(variant, true));
+                } else {
+                    userInputList.add(new HistoryRecord(variant, false));
+                }
             }
         }
     }
