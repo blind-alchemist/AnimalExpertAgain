@@ -1,6 +1,6 @@
 package org.example;
 
-public class Entity {
+public class Entity implements Comparable<Entity> {
 
     private EntityType entityType;
     private String name;
@@ -32,5 +32,10 @@ public class Entity {
                 "entityType=" + entityType +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Entity e) {
+        return name.compareTo(e.getName());
     }
 }

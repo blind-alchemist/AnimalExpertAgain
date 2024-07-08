@@ -17,16 +17,20 @@ public class KnowledgeBase {
                     } else {
                         if (historyRecord.getToBe()) {
                             for (Entity c : charVariants) {
-                                if (!c.equals(historyRecord.getEntity())) {
+                                for (Entity x : entry.getValue()) {
+                                    if (c.compareTo(x) != 0) {
                                     ignoreAnimal = true;
                                     break;
+                                    }
                                 }
                             }
                         } else {
                             for (Entity c : charVariants) {
-                                if (c.equals(historyRecord.getEntity())) {
-                                    ignoreAnimal = true;
-                                    break;
+                                for (Entity x : entry.getValue()) {
+                                    if (c.compareTo(x) == 0) {
+                                        ignoreAnimal = true;
+                                        break;
+                                    }
                                 }
                             }
                         }
