@@ -5,22 +5,21 @@ import java.util.*;
 public class KnowledgeBase {
 
 
-    public Entity guessing(Map<Entity, List<Entity>> knowledgeBase, List<HistoryRecord> userInput) {
+    public Entity guessing(Map<Entity, List<Entity>> knowledgeBase, HashSet<HistoryRecord> userInput) {
         List<Entity> animalVariants = new ArrayList<>();
         List<Entity> charVariants = new ArrayList<>();
-        List<Entity> charFullList = new ArrayList<>();
-        for (List<Entity> v : knowledgeBase.values()) {
-            if (!charFullList.contains(v)) {
-            charFullList.addAll(v);
-            }
+        HashSet<Entity> charFullList = new HashSet<>();
+        for (List<Entity> c : knowledgeBase.values()) {
+            charFullList.addAll(c);
         }
-        System.out.println(charFullList);
+        System.out.println("charFullList: " + charFullList);
         for (Entity characteristic : charFullList) {
             if (!userInput.isEmpty()) {
                 for (HistoryRecord userInputCheck : userInput) {
                     if (userInputCheck.getToBe()) {
                         if (characteristic.compareTo(userInputCheck.getEntity()) != 0) {
                             charVariants.add(characteristic);
+                            break;
                         }
                     }
                 }
@@ -34,6 +33,7 @@ public class KnowledgeBase {
                     if (userInputCheck.getToBe()) {
                         if (animal.compareTo(userInputCheck.getEntity()) != 0) {
                             animalVariants.add(animal);
+                            break;
                         }
                     }
                 }
@@ -41,17 +41,22 @@ public class KnowledgeBase {
                 animalVariants.add(animal);
             }
         }
-        System.out.println(animalVariants);
-        System.out.println(charVariants);
+        System.out.println("userInput: " + userInput.toString());
+        System.out.println("animalVariants: " + animalVariants);
+        System.out.println("charVariants: " + charVariants);
         if (animalVariants.size() == 1) {
             return animalVariants.get(0);
-        } else if (!charVariants.isEmpty()) {
-            return charVariants.get(0);
+        } else if (animalVariants.size() > 1) {
+            if (charVariants.size() > 1) {
+                return charVariants.get(0);
+            } else {
+                return animalVariants.get(0);
+            }
         }
         return null;
     }
 
-      public void update(Entity animal, List<Entity> newCharacteristic, Map<Entity, List<Entity>> knowledgeBase, List<HistoryRecord> userInput) {
+      public void update(Entity animal, List<Entity> newCharacteristic, Map<Entity, List<Entity>> knowledgeBase, HashSet<HistoryRecord> userInput) {
         List<Entity> characteristics = new ArrayList<>();
         for (HistoryRecord historyRecord : userInput) {
             if (historyRecord.getEntity().getEntityType().equals(EntityType.CHARACTERISTIC) && historyRecord.getToBe()) {

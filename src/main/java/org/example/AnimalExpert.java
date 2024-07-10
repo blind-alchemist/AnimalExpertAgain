@@ -15,7 +15,7 @@ public class AnimalExpert {
 
         KnowledgeBase knowledgeBase = new KnowledgeBase();
         Map<Entity, List<Entity>> knowledgeBaseMap = new HashMap<>();
-        List<HistoryRecord> userInputList = new ArrayList<>();
+        HashSet<HistoryRecord> userInputList = new HashSet<>();
         out.println(startText);
         enter.nextLine();
 
