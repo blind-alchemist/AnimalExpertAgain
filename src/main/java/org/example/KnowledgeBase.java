@@ -9,6 +9,7 @@ public class KnowledgeBase {
         List<Entity> animalVariants = new ArrayList<>();
         List<Entity> charVariants = new ArrayList<>();
         HashSet<Entity> charFullList = new HashSet<>();
+        HashSet<Entity> ignore = new HashSet<>();
         for (List<Entity> c : knowledgeBase.values()) {
             charFullList.addAll(c);
         }
@@ -17,8 +18,17 @@ public class KnowledgeBase {
             if (!userInput.isEmpty()) {
                 for (HistoryRecord userInputCheck : userInput) {
                     if (userInputCheck.getToBe()) {
-                        if (characteristic.compareTo(userInputCheck.getEntity()) != 0) {
-                            charVariants.add(characteristic);
+                        if (characteristic.compareTo(userInputCheck.getEntity()) != 0 && !charVariants.contains(characteristic)) {
+                            if (!ignore.isEmpty()) {
+                                for (Entity i : ignore) {
+                                    if (characteristic.compareTo(i) != 0) {
+                                        charVariants.add(characteristic);
+                                            break;
+                                        }
+                                    }
+                                }
+                            } else {
+                            ignore.add(characteristic);
                             break;
                         }
                     }

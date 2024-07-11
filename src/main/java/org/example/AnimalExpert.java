@@ -54,7 +54,6 @@ public class AnimalExpert {
                     userInputList.clear();
                     out.println("-----\n" + startText);
                 } else {
-                    knowledgeBase.update(new Entity(EntityType.ANIMAL, animalName), newChar, knowledgeBaseMap, userInputList);
                     userInputList.add(new HistoryRecord(variant, Boolean.FALSE));
                 }
             } else  //variant type is "characteristic"
